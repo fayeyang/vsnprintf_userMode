@@ -4,43 +4,45 @@
 #include <stdarg.h>
 
 int vsn( char *format, ... ){
-	int   	 tmp;
-	char 	 buf[20];
-	va_list  arg_ptr, arg_ptr1;
-
-	tmp = sizeof( int );
-	for( tmp=0; tmp<20; tmp++ ){
-		buf[tmp]=0xFF;
-	}
+	char 	 *cptr;
+	int   	  tmp,     len;
+	va_list   arg_ptr, arg_ptr1;
 	
 	va_start( arg_ptr, format );
 	va_copy( arg_ptr1, arg_ptr );
-	tmp = vsnprintf( buf, 10, format, arg_ptr );
+	len = vsnprintf( (char*)&tmp, 0, format, arg_ptr );
 	va_end( arg_ptr );
+	++len;
 
-	printf( "%s\n", buf );
-	printf( "%d\n", tmp );
+	cptr = NULL;
+	cptr = malloc( len );
+	if( NULL == cptr ){
+		perror( "malloc error:" );
+		return 1;
+	}
+	memset( cptr, 0xFF, len );
 
-	for( tmp=0; tmp<10; tmp++ ){
-		printf( "%d\t", buf[tmp] );
+	len = vsnprintf( cptr, len, format, arg_ptr1 );
+	va_end( arg_ptr1 );
+	printf( "len=%d\n", len );
+	printf( "%s\n", cptr );
+	
+	for( tmp=0; tmp<=len; tmp++ ){
+		printf( "%d\t", cptr[tmp] );
 	}
 	printf( "\n" );
 
-	for( tmp=0; tmp<10; tmp++ ){
-		printf( "%c\t", buf[tmp] );
+	for( tmp=0; tmp<=len; tmp++ ){
+		printf( "%c\t", cptr[tmp] );
 	}
 	printf( "\n" );
 
+	free( cptr );
+	
 	return 0;
 }
 
-int main( void ){
-
-	char *str1 = "abc";
-	char *str2 = "xyz";
-	int m = 10;
-	int n = 1000;
-
-	vsn( "%s,%d,%s,%d", "abc", 10, "xyz", 1000 );
+int main( int argc, char *argv[] ){
+	vsn( "%s, %d, %s, %c", "abc", 10, "xyz", 'A' );
 	return 0;	
 }
