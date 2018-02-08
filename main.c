@@ -6,7 +6,7 @@
 int vsn( char *format, ... ){
 	int   	 tmp;
 	char 	 buf[20];
-	va_list  arg_ptr;
+	va_list  arg_ptr, arg_ptr1;
 
 	tmp = sizeof( int );
 	for( tmp=0; tmp<20; tmp++ ){
@@ -14,11 +14,22 @@ int vsn( char *format, ... ){
 	}
 	
 	va_start( arg_ptr, format );
+	va_copy( arg_ptr1, arg_ptr );
 	tmp = vsnprintf( buf, 10, format, arg_ptr );
 	va_end( arg_ptr );
 
 	printf( "%s\n", buf );
 	printf( "%d\n", tmp );
+
+	for( tmp=0; tmp<10; tmp++ ){
+		printf( "%d\t", buf[tmp] );
+	}
+	printf( "\n" );
+
+	for( tmp=0; tmp<10; tmp++ ){
+		printf( "%c\t", buf[tmp] );
+	}
+	printf( "\n" );
 
 	return 0;
 }
