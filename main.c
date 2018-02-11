@@ -43,6 +43,22 @@ int vsn( char *format, ... ){
 }
 
 int main( int argc, char *argv[] ){
+	int tmp;
+	char buf[15];
+	
+	memset( buf, 0xff, 15 );
+	tmp = snprintf( buf, 20, "%s", "test string" );
+	printf( "%d\n", tmp );
+	printf( "%s\n", buf );
+	for( tmp=0; tmp<=12; tmp++ ){
+		printf( "%d\t", buf[tmp] );
+	}
+	printf( "\n" );
+	for( tmp=0; tmp<=12; tmp++ ){
+		printf( "%c\t", buf[tmp] );
+	}
+	printf( "\n" );
+
 	vsn( "%s, %d, %s, %c", "abc", 10, "xyz", 'A' );
 	return 0;	
 }
