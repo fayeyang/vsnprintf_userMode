@@ -44,21 +44,23 @@ int vsn( char *format, ... ){
 
 int main( int argc, char *argv[] ){
 	int tmp;
-	char buf[15];
+	char buf[ 60 ];
 	
-	memset( buf, 0xff, 15 );
-	tmp = snprintf( buf, 20, "%s", "test string" );
+	memset( buf, 0xff, 60 );
+	tmp = sprintf( buf, "string is: %s\n", "test string" );
+	tmp += sprintf( buf+tmp, "number is: %d\n", 100 );
+	tmp += sprintf( buf+tmp, "character is %c\n", '?' );
 	printf( "%d\n", tmp );
 	printf( "%s\n", buf );
-	for( tmp=0; tmp<=12; tmp++ ){
+	for( tmp=0; tmp<=60; tmp++ ){
 		printf( "%d\t", buf[tmp] );
 	}
 	printf( "\n" );
-	for( tmp=0; tmp<=12; tmp++ ){
+	for( tmp=0; tmp<=60; tmp++ ){
 		printf( "%c\t", buf[tmp] );
 	}
 	printf( "\n" );
 
-	vsn( "%s, %d, %s, %c", "abc", 10, "xyz", 'A' );
+	//vsn( "%s, %d, %s, %c", "abc", 10, "xyz", 'A' );
 	return 0;	
 }
