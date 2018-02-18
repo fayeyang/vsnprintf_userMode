@@ -48,27 +48,50 @@ int main( int argc, char *argv[] ){
 	int tmp;
 	char buf[ 60 ];
 	wchar_t wbuf[ 60 ];
-	char str[]		= "world";
+	char str[]		= "world世界";
 	wchar_t wstr[]	= L"world";
 	
 	wchar_t wchs[] = L"中";
 
 	wchar_t wchr = 'a';
 
+	char *cptr;
 	wchar_t *wptr;
+
+	tmp = 0;
+	tmp = wcstombs( NULL, wstr, 0 );
+	if( tmp > 0 ){
+		tmp++;
+		cptr = NULL;
+		cptr = ( char* )malloc( sizeof(char) * tmp );
+		if( cptr == NULL ){
+			perror( "malloc error:" );
+			return 1;
+		}
+	} else {
+		perror( "wcstombs error" );
+		return 1;
+	}
+	
+	tmp = wcstombs( cptr, wstr, tmp );
+	free( cptr );
 
 	tmp = 0;
 	tmp = mbstowcs( NULL, str, 0 );
 	if( tmp > 0 ){
 		tmp++;
 		wptr = NULL;
-		wptr = ( wchar_t* )malloc( sizeof(wchar_t)*tmp );
+		wptr = ( wchar_t* )malloc( sizeof(wchar_t) * tmp );
 		if( wptr == NULL ){
 			perror( "malloc error:" );
 			return 1;
 		}
+	} else {
+		perror( "mbstowcs error" );
+		return 1;
 	}
 	tmp = mbstowcs( wptr, str, tmp );
+	free( wptr );
 
 	tmp = strlen( str );
 	tmp = wcslen( wstr );
